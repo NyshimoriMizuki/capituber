@@ -1,0 +1,9 @@
+{% extends "base" %}
+
+{% block content %}
+
+<div>
+    <h1>WIP</h1>
+</div>
+
+{% endblock content %}

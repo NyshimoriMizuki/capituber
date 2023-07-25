@@ -1,0 +1,13 @@
+[package]
+name = "capitube-web"
+version = "0.1.0"
+edition = "2021"
+description = "CapiTube is an app that captures the microphone input to animate a model based on PNG images."
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = { version = "=0.5.0-rc.3", features = ["json"] }
+rocket_dyn_templates = { version = "=0.1.0-rc.3", features = ["tera"] }
+futures = "0.3.28"
+local-ip-address = "0.5.3"
