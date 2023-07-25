@@ -7,6 +7,8 @@
 #[macro_use]
 extern crate rocket;
 
+use std::net::IpAddr;
+
 use futures::lock::Mutex;
 
 use rocket::{
@@ -22,22 +24,29 @@ mod model;
 mod routes;
 mod transform;
 
-const ADDRESS: &'static str = "127.0.0.1";
-const PORT: u16 = 6000;
+pub(crate) const ADDRESS: &'static str = "0.0.0.0";
+pub(crate) const PORT: u16 = 1425;
 
-#[launch]
-fn rocket() -> _ {
-    let ip = match local_ip() {
+pub(crate) fn get_link() -> IpAddr {
+    match local_ip() {
         Ok(i) => i,
         Err(e) => {
             println!("Failed to get local ip");
             eprintln!("Error: {}", e);
             std::process::exit(1);
         }
-    };
+    }
+}
 
-    println!("Launching CapiTube-web");
-    println!("Open [ http://{ip}:{PORT} ] in the browser to play with CapiTube!\n",);
+#[launch]
+fn rocket() -> _ {
+    let ip = get_link();
+
+    println!(" —— [Launching CapiTube-web] —— ");
+    println!("Open the link in browser to play with CapiTube!");
+    println!("link: [ http://{ip}:{PORT} ]\n");
+
+    println!("You dont need to really care about the logs that here\nin the terminal.\n");
 
     let config = Config::figment()
         .merge(("address", ADDRESS))
@@ -48,9 +57,18 @@ fn rocket() -> _ {
         .attach(model::ModelState::fairing(PORT))
         .attach(Template::fairing())
         .manage(Mutex::new(model::ModelState::default()))
-        .mount("/", FileServer::from(relative!("client/dist")))
-        .mount("/", FileServer::from(relative!("../models")))
         .mount("/", routes![routes::home])
-        .mount("/capitube", routes![routes::model, routes::events])
-        .mount("/api", routes![routes::config_model, routes::update_model])
+        .mount("/", routes![routes::model])
+        .mount(
+            "/",
+            routes![
+                routes::config_model,
+                routes::update_model,
+                routes::events,
+                routes::api
+            ],
+        )
+        .mount("/d", FileServer::from(relative!("client/dist")))
+        .mount("/m", FileServer::from(relative!("models/")))
+        .mount("/s", FileServer::from(relative!("static")))
 }

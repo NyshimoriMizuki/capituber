@@ -19,7 +19,7 @@ pub struct ModelState {
     pose: u8,
     state: u8,
     transform: Transform,
-    blink_config: Vec<u8>,
+    blink_config: Vec<u32>,
 }
 
 impl ModelState {
@@ -27,7 +27,7 @@ impl ModelState {
         self.model.clone()
     }
 
-    pub fn unpack(&self) -> (u8, u8, Vec<u8>, Transform) {
+    pub fn unpack(&self) -> (u8, u8, Vec<u32>, Transform) {
         (
             self.pose,
             self.state,
@@ -36,21 +36,19 @@ impl ModelState {
         )
     }
 
-    pub fn update(&mut self, pose: u8, blink_config: Vec<u8>, transform: &Transform) {
-        self.pose = pose;
-        self.blink_config = blink_config;
-        self.transform = transform.clone();
-    }
+    pub fn set_transform(&mut self, transform: &Transform) {
+        let (position, scale, rotation) = transform.unpack();
 
-    pub fn update_state(&mut self, state: u8) {
-        self.state = state;
+        self.transform.positionate(position[0], position[1]);
+        self.transform.scale(scale[0], scale[1]);
+        self.transform.rotate(rotation);
     }
 
     pub fn change_model(&mut self, model: &str) {
         self.model = model.to_string();
     }
 
-    pub fn blink(&mut self, blink_counter: u8) -> (ModelState, bool) {
+    pub fn blink(&mut self, blink_counter: u32) -> (ModelState, bool) {
         if blink_counter < self.blink_config[1] {
             self.state += 1;
         }
@@ -65,7 +63,6 @@ impl ModelState {
     }
 
     pub fn fairing(port: u16) -> ModelFairing {
-        println!("{}", port);
         ModelFairing { port }
     }
 }
@@ -77,7 +74,7 @@ impl Default for ModelState {
             pose: 0,
             state: 0,
             transform: Transform::default(),
-            blink_config: vec![25, 5],
+            blink_config: vec![35, 7],
         }
     }
 }
@@ -102,6 +99,6 @@ impl Fairing for ModelFairing {
         response.set_header(Header::new("Access-Control-Allow-Origin", link.clone()));
         response.set_header(Header::new("Access-Control-Allow-Methods", allowed_methods));
         response.set_header(Header::new("Access-Control-Allow-Headers", "*"));
-        response.set_header(Header::new("x-frame-options", format!("ALLOW-FROM {link}")));
+        // response.set_header(Header::new("x-frame-options", format!("ALLOW-FROM {link}")));
     }
 }

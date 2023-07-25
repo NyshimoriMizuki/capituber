@@ -16,21 +16,32 @@ use rocket_dyn_templates::{context, Template};
 use crate::model::ModelState;
 
 #[get("/")]
-pub fn home() -> String {
-    "Home".to_owned()
-}
-
-#[get("/")]
-pub fn model() -> Template {
+pub fn home() -> Template {
     Template::render(
-        "model",
+        "home",
         context! {
-            title: "test"
+            title: "home"
         },
     )
 }
 
-#[get("/events")]
+#[get("/model")]
+pub fn model() -> Template {
+    Template::render(
+        "model",
+        context! {
+            title: "model"
+        },
+    )
+}
+
+#[get("/capitube/api")]
+pub async fn api<'a>(model: &'a State<Mutex<ModelState>>) -> Json<ModelState> {
+    let model_ref = model.lock().await.clone();
+    Json(model_ref)
+}
+
+#[get("/capitube/events")]
 pub fn events<'a>(model: &'a State<Mutex<ModelState>>) -> EventStream![Event + 'a] {
     EventStream! {
         let mut delay = interval(Duration::from_millis(50));
@@ -38,7 +49,7 @@ pub fn events<'a>(model: &'a State<Mutex<ModelState>>) -> EventStream![Event + '
 
         loop {
             blink_counter += 1;
-            let (model_ref, reset_counter) = model.lock().await.clone().blink(blink_counter as u8);
+            let (model_ref, reset_counter) = model.lock().await.clone().blink(blink_counter);
             if reset_counter { blink_counter = 0;}
 
             yield Event::json(&model_ref);
@@ -47,13 +58,21 @@ pub fn events<'a>(model: &'a State<Mutex<ModelState>>) -> EventStream![Event + '
     }
 }
 
-#[get("/user-model")]
-pub async fn config_model(model: &State<Mutex<ModelState>>) -> Json<ModelState> {
-    let model_ref = model.lock().await.clone();
-    Json(model_ref)
+#[get("/capitube/config")]
+pub async fn config_model(model: &State<Mutex<ModelState>>) -> Template {
+    let _model_ref = model.lock().await.clone();
+
+    Template::render(
+        "config",
+        context! {
+            title: "configuration",
+            port: crate::PORT,
+            link: format!("{}/{}", crate::get_link(), "model")
+        },
+    )
 }
 
-#[post("/user-model", data = "<req>")]
+#[post("/capitube/model/post", data = "<req>")]
 pub async fn update_model(req: Json<ModelState>, model: &State<Mutex<ModelState>>) {
     let mut model_ref = model.lock().await;
 
@@ -64,7 +83,6 @@ pub async fn update_model(req: Json<ModelState>, model: &State<Mutex<ModelState>
     }
 
     // state should contain only if is speaking or not (2 speaking, 0 not speak)
-    let (pose, _state, position, transform) = req.unpack();
-    model_ref.update(pose, position, &transform);
-    model_ref.update_state(0);
+    let (_pose, _state, _position, transform) = req.unpack();
+    model_ref.set_transform(&transform);
 }

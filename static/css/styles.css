@@ -1,0 +1,25 @@
+.model-container {
+    border: 2px solid;
+    border-radius: 5px;
+
+    width: calc(1750px/4);
+    height: calc(2000px/4);
+}
+
+.model-iframe {
+    overflow: hidden;
+    width: 1750px;
+    height: 2000px;
+
+    transform: scale(0.25);
+    transform-origin: 0 0;
+
+    border: 0px solid;
+}
+
+.scale {
+    padding: 2px;
+    border: 2px solid;
+    width: 75px;
+    text-align: center;
+}

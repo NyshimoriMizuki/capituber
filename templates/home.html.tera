@@ -1,0 +1,10 @@
+{% extends "base" %}
+
+{% block content %}
+
+<body>
+    <a href="/model">model</a>
+    <a href="/capitube/config">config</a>
+</body>
+
+{% endblock content %}

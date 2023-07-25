@@ -1,0 +1,26 @@
+{% extends "base" %}
+
+{% block content %}
+
+<body style="overflow: hidden;">
+    <div class="link">{{ link }}</div>
+    <input type="number" class="sensibility" value="1" min="0" max="9">
+
+    <form class="post-config">
+        <input type="text" class="model-name" placeholder="std" value="std">
+        <input type="number" class="pose" placeholder="pose" min="0">
+        <input type="checkbox" class="mouth-state">
+        <br>
+        <button type="submit" class="btn submit">submit</button>
+    </form>
+
+    <div class="scale">100×100</div>
+
+    <div class="model-container">
+        <iframe src="/model" class="model-iframe"></iframe>
+    </div>
+
+    <script type="text/javascript" src="/s/js/config.js"></script>
+</body>
+
+{% endblock content %}

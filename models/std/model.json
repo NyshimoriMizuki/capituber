@@ -1,0 +1,28 @@
+{
+    "name": "Xisen",
+    "about": {
+        "artist": "@NyshimoriMizuki",
+        "owner": "@NyshimoriMizuki",
+        "version": "1.0.0",
+        "description": "my old model that i will use to test the CapiTube"
+    },
+    "expressions": [
+        {
+            "config": {
+                "idle-vib-lvl": 0,
+                "talk-vib-lvl": 0,
+                "blink-tick": [
+                    20,
+                    5
+                ],
+                "hotkey": "<none>"
+            },
+            "frames": [
+                "1.png",
+                "2.png",
+                "3.png",
+                "4.png"
+            ]
+        }
+    ]
+}
