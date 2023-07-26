@@ -5,40 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <style>
-        body {
-            padding: 0%;
-            margin: 0%;
-            width: 1750px;
-            height: 2000px;
-            overflow: hidden;
-        }
-
-        .model {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            height: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="/s/css/model.css">
 </head>
 
 <body>
-    <img class="model" src="m/std/1.png">
-    <script>
-        const model = document.querySelector(".model");
-        const source = new EventSource("/capitube/events");
-
-        source.addEventListener("message", (e) => {
-            const data = JSON.parse(e.data);
-
-            model.src = `m/${data.model}/${data.state + 1}.png`;
-            model.style.scale = `${data.transform.scale[0]}% ${data.transform.scale[1]}%`;
-            model.style.left = `${data.transform.position[0]}px`;
-            model.style.top = `${data.transform.position[1]}px`
-            model.style.rotate = `${data.transform.rotation}deg`;
-        });
-    </script>
+    <div class="model-container">
+        <img class="model unselect" src="/m/std/1.png">
+    </div>
+    <script type="text/javascript" src="/s/js/model.js"></script>
 </body>
 
 </html>

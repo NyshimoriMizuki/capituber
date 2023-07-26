@@ -9,10 +9,10 @@
     "expressions": [
         {
             "config": {
-                "idle-vib-lvl": 0,
-                "talk-vib-lvl": 0,
-                "blink-tick": [
-                    20,
+                "idle_vibration": 0,
+                "talk_vibration": 0,
+                "blink_tick": [
+                    35,
                     5
                 ],
                 "hotkey": "<none>"
@@ -22,6 +22,23 @@
                 "2.png",
                 "3.png",
                 "4.png"
+            ]
+        },
+        {
+            "config": {
+                "idle_vibration": 0,
+                "talk_vibration": 0,
+                "blink_tick": [
+                    40,
+                    20
+                ],
+                "hotkey": "<none>"
+            },
+            "frames": [
+                "tst/1.png",
+                "tst/2.png",
+                "tst/3.png",
+                "tst/4.png"
             ]
         }
     ]

@@ -23,3 +23,7 @@
     width: 75px;
     text-align: center;
 }
+
+.unselect {
+    user-select: none;
+}

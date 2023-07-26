@@ -10,12 +10,12 @@ use rocket::serde::{Deserialize, Serialize};
 #[serde(crate = "rocket::serde")]
 pub struct Transform {
     position: [i32; 2],
-    scale: [u32; 2],
+    scale: [i32; 2],
     rotation: i32,
 }
 
 impl Transform {
-    pub fn unpack(&self) -> ([i32; 2], [u32; 2], i32) {
+    pub fn unpack(&self) -> ([i32; 2], [i32; 2], i32) {
         (
             self.position.clone(),
             self.scale.clone(),
@@ -28,7 +28,7 @@ impl Transform {
         self.position[1] = y;
     }
 
-    pub fn scale(&mut self, x: u32, y: u32) {
+    pub fn scale(&mut self, x: i32, y: i32) {
         self.scale[0] = x;
         self.scale[1] = y;
     }

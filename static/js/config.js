@@ -12,6 +12,17 @@ const transform = {
     rotation: 0
 };
 
+const getModelConfig = async () => {
+    const response = await fetch("http://localhost:1425/capitube/m/std/model.json")
+        .catch((error) => {
+            console.error(error);
+        });
+    return await response.json()
+};
+
+
+
+
 const clip = (x, min, max) => {
     x = Math.min(x, max);
     return Math.max(x, min);
@@ -56,16 +67,10 @@ window.addEventListener("keydown", async e => {
         scaleText.innerHTML = `${transform.scale[0]}×${transform.scale[1]}`;
     } else return
 
-    await update({
-        model: "",
-        pose: 0,
-        state: 0,
-        transform: {
-            position: [...transform.position],
-            scale: [...transform.scale],
-            rotation: transform.rotation
-        },
-        blink_config: [0, 0]
+    await update("post-transform", {
+        position: transform.position,
+        scale: transform.scale,
+        rotation: transform.rotation
     }).catch((err) => {
         // very common false positive error in my tests.
         if (err.toString().includes("unexpected end of data at line 1 column 1 of the JSON data"))
@@ -74,25 +79,35 @@ window.addEventListener("keydown", async e => {
     });
 });
 
-submitBtn.addEventListener("click", (e) => {
+submitBtn.addEventListener("click", async (e) => {
     e.preventDefault();
+    const poseId = parseInt(pose.value) ? parseInt(pose.value) : 0;
 
-    console.log({
+    const expr = (await getModelConfig()).expressions[poseId];
+
+    await update("post-update", {
         model: modelname.value,
-        pose: pose.value,
-        state: state.checked ? 2 : 1
-    });
+        pose: poseId,
+        state: state.checked ? 2 : 0,
+        transform: {
+            position: [0, 0],
+            scale: [0, 0],
+            rotation: 0
+        },
+        blink_config: expr.config.blink_tick
+    }).catch((err) => {
+        // very common false positive error in my tests.
+        if (err.toString().includes("unexpected end of data at line 1 column 1 of the JSON data"))
+            return
+        console.error(err)
+    })
 });
 
-async function update(data) {
-    const response = await fetch("http://localhost:1425/capitube/model/post", {
+async function update(name, data) {
+    const response = await fetch("http://localhost:1425/capitube/model/" + name, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     });
     return response.json();
-}
-
-function useSensibility(input, sensibility) {
-    return input * (1 + sensibility / 4)
 }

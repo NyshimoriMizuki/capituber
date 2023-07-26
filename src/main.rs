@@ -64,8 +64,10 @@ fn rocket() -> _ {
             routes![
                 routes::config_model,
                 routes::update_model,
+                routes::update_transform,
                 routes::events,
-                routes::api
+                routes::api,
+                routes::get_model_config
             ],
         )
         .mount("/d", FileServer::from(relative!("client/dist")))

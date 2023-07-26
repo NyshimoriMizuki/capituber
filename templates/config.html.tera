@@ -11,16 +11,16 @@
         <input type="number" class="pose" placeholder="pose" min="0">
         <input type="checkbox" class="mouth-state">
         <br>
-        <button type="submit" class="btn submit">submit</button>
+        <button type="submit" class="btn submit unselect">submit</button>
     </form>
 
-    <div class="scale">100×100</div>
+    <div class="scale unselect">100×100</div>
 
     <div class="model-container">
-        <iframe src="/model" class="model-iframe"></iframe>
+        <iframe src="/model" class="model-iframe unselect"></iframe>
     </div>
 
-    <script type="text/javascript" src="/s/js/config.js"></script>
+    <script type="module" src="/s/js/config.js"></script>
 </body>
 
 {% endblock content %}
