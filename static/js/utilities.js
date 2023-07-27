@@ -6,4 +6,8 @@ async function getModelConfig() {
     let data = await response.json();
 };
 
-export default { getModelConfig };
+function test(Text) {
+    console.log(Text);
+}
+
+export default { getModelConfig, test };

@@ -16,7 +16,7 @@ use rocket::{
 use rocket_dyn_templates::{context, Template};
 
 use crate::{
-    model::{ModelConfig, ModelState},
+    model::{ModelConfig, ModelState, MouthState},
     transform::Transform,
 };
 
@@ -81,31 +81,26 @@ pub async fn config_model(model: &State<Mutex<ModelState>>) -> Template {
 pub async fn update_model(req: Json<ModelState>, model: &State<Mutex<ModelState>>) {
     let mut model_ref = model.lock().await;
 
-    if !req.get_model().is_empty() && req.get_model() != model_ref.get_model() {
+    model_ref.set_blink_config_from(&req);
+
+    if !req.have_model() && model_ref.is_name_different(&req) {
         model_ref.reset();
-        model_ref.change_model(&req.get_model());
-        model_ref.set_blink_config(req.get_blink_config());
+        model_ref.change_model_from(&req);
         return;
     }
-
-    // state should contain only if is speaking or not (2 speaking, 0 not speak)
-    let (pose, state, blink_config, _) = req.unpack();
-
-    if state < 4 {
-        model_ref.set_state(state);
-    }
-    if pose != model_ref.get_pose() {
-        model_ref.set_pose(pose);
-    }
-    if req.get_blink_config() != vec![0, 0] {
-        model_ref.set_blink_config(blink_config);
-    }
+    model_ref.set_pose_from(&req);
 }
 
 #[post("/capitube/model/post-transform", data = "<req>")]
 pub async fn update_transform(req: Json<Transform>, model: &State<Mutex<ModelState>>) {
     let mut model_ref = model.lock().await;
     model_ref.set_transform(&req);
+}
+
+#[post("/capitube/model/post-state", data = "<req>")]
+pub async fn update_state(req: Json<MouthState>, model: &State<Mutex<ModelState>>) {
+    let mut model_ref = model.lock().await;
+    model_ref.set_state(&req);
 }
 
 #[get("/capitube/m/<modelname>/model.json")]

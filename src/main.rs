@@ -65,6 +65,7 @@ fn rocket() -> _ {
                 routes::config_model,
                 routes::update_model,
                 routes::update_transform,
+                routes::update_state,
                 routes::events,
                 routes::api,
                 routes::get_model_config

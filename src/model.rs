@@ -25,25 +25,16 @@ pub struct ModelState {
 }
 
 impl ModelState {
-    pub fn get_model(&self) -> String {
-        self.model.clone()
+    pub fn set_pose_from(&mut self, model: &ModelState) {
+        if model.pose != self.pose {
+            self.pose = model.pose.clone();
+        }
     }
 
-    pub fn get_blink_config(&self) -> Vec<u32> {
-        self.blink_config.clone()
-    }
-
-    pub fn get_pose(&self) -> u8 {
-        self.pose.clone()
-    }
-
-    pub fn unpack(&self) -> (u8, u8, Vec<u32>, Transform) {
-        (
-            self.pose,
-            self.state,
-            self.blink_config.clone(),
-            self.transform.clone(),
-        )
+    pub fn set_blink_config_from(&mut self, model: &ModelState) {
+        if model.blink_config != self.blink_config {
+            self.blink_config = model.blink_config.clone();
+        }
     }
 
     pub fn set_transform(&mut self, transform: &Transform) {
@@ -54,20 +45,24 @@ impl ModelState {
         self.transform.rotate(rotation);
     }
 
-    pub fn set_state(&mut self, state: u8) {
-        self.state = state;
+    pub fn set_state(&mut self, mouth_state: &MouthState) {
+        if mouth_state.is_open() {
+            self.state = 2;
+        } else {
+            self.state = 0;
+        }
     }
 
-    pub fn set_pose(&mut self, pose_id: u8) {
-        self.pose = pose_id;
+    pub fn change_model_from(&mut self, model: &ModelState) {
+        self.model = model.model.clone();
     }
 
-    pub fn set_blink_config(&mut self, config: Vec<u32>) {
-        self.blink_config = config;
+    pub fn have_model(&self) -> bool {
+        self.model.is_empty()
     }
 
-    pub fn change_model(&mut self, model: &str) {
-        self.model = model.to_string();
+    pub fn is_name_different(&self, model: &ModelState) -> bool {
+        self.model != model.model
     }
 
     pub fn blink(&mut self, blink_counter: u32) -> (ModelState, bool) {
@@ -147,4 +142,16 @@ struct ExpressionsConfig {
     talk_vibration: u8,
     blink_tick: [u32; 2],
     hotkey: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(crate = "rocket::serde")]
+pub struct MouthState {
+    mouth_open: bool,
+}
+
+impl MouthState {
+    pub fn is_open(&self) -> bool {
+        self.mouth_open
+    }
 }
