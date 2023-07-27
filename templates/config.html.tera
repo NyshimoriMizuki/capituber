@@ -21,13 +21,15 @@
     </form>
 
     <div class="scale unselect">100×100</div>
-
+    <div class="sound">
+        <input type="range" class="sound-slider" min="0" max="255" value="100">
+        <canvas class="sound-bar"></canvas>
+    </div>
     <div class="model-container">
         <iframe src="/model" class="model-iframe unselect"></iframe>
     </div>
 
-    <script type="module" src="/s/js/utilities.js"></script>
-    <script type="module" src="/s/js/config.js"></script>
+    <script type="module" src="/d/js/config.js"></script>
 </body>
 
 {% endblock content %}

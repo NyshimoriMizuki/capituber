@@ -1,2 +1,5 @@
 /target
-/client
+**/node_modules
+
+
+**/package-lock.json

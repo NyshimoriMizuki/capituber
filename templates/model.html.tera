@@ -11,14 +11,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="/s/css/model.css">
+    <link rel="stylesheet" href="/d/css/model.css">
 </head>
 
 <body>
     <div class="model-container">
         <img class="model unselect" src="/m/std/1.png">
     </div>
-    <script type="text/javascript" src="/s/js/model.js"></script>
+    <script type="text/javascript" src="/d/js/model.js"></script>
 </body>
 
 </html>

@@ -4,29 +4,27 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-import test from "./utilities.js";
+import Microphone from "./microphone.js";
+import Sensor from "./sensor.js";
 
-test.test("texto")
-
-const modelname = document.querySelector(".model-name");
-const pose = document.querySelector(".pose");
-const state = document.querySelector(".mouth-state");
-const scaleText = document.querySelector(".scale");
-const sensibility = document.querySelector(".sensibility");
+const modelname = document.querySelector<HTMLInputElement>(".model-name");
+const pose = document.querySelector<HTMLInputElement>(".pose");
+const scaleText = document.querySelector<HTMLDivElement>(".scale");
+const sensibility = document.querySelector<HTMLInputElement>(".sensibility");
 
 const submitBtn = document.querySelector(".submit");
 
-const sleep = async (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const getModelConfig = async () => {
     const response = await fetch("http://localhost:1425/capitube/m/std/model.json")
         .catch((error) => {
             console.error(error);
-        });
+        }) as Response;
     return await response.json()
 };
 
-const clip = (x, min, max) => {
+const clip = (x: number, min: number, max: number) => {
     x = Math.min(x, max);
     return Math.max(x, min);
 };
@@ -50,15 +48,15 @@ window.addEventListener("keydown", async (e) => {
 
     } else if (e.key.includes("Arrow")) {
         e.preventDefault();
-        steps.move = Math.round(1 + (sensibility.value | 1) / 3);
+        steps.move = Math.round(1 + (parseInt(sensibility.value) | 1) / 3);
         const p = {
             "ArrowLeft": [-10 * steps.move, 0],
             "ArrowRight": [10 * steps.move, 0],
             "ArrowUp": [0, -10 * steps.move],
             "ArrowDown": [0, 10 * steps.move]
         };
-        transform.position[0] += p[e.key][0];
-        transform.position[1] += p[e.key][1];
+        transform.position[0] += p[e.key as keyof typeof p][0];
+        transform.position[1] += p[e.key as keyof typeof p][1];
 
     } else if (e.key == "+" || e.key == "-") {
         scale += e.key == "+" ? steps.scale : -steps.scale;
@@ -97,7 +95,7 @@ submitBtn.addEventListener("click", async (e) => {
     })
 });
 
-async function update(name, data) {
+async function update(name: string, data: object) {
     const response = await fetch("http://localhost:1425/capitube/model/" + name, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -112,12 +110,32 @@ async function update(name, data) {
         });
 }
 
+const mic = new Microphone(512);
+const sensor = new Sensor([0, 0], [350, 20], "black");
+const soundSlider = document.querySelector<HTMLInputElement>(".sound-slider")!;
+const soundBar = document.querySelector<HTMLCanvasElement>(".sound-bar")!;
+const bar_ctx = soundBar?.getContext("2d")!;
+
+soundBar.height = sensor.height();
+soundBar.width = sensor.width();
 
 const sendMicrophoneInput = async () => {
-    console.log('Testing');
+    bar_ctx.clearRect(0, 0, soundBar.width, soundBar.height);
+    if (mic.initialized) {
+        const volumeHeight = Math.round(mic.getVolume() * soundBar.width / 255)
 
-    await sleep(1000);
+        sensor.update((bar) => {
+            bar.y = 0;
+            bar.width = volumeHeight;
+        })
+        sensor.draw(bar_ctx);
+        await update("post-state", {
+            mouth_open: mic.getVolume() > parseInt(soundSlider.value),
+        });
+    }
+
+    await sleep(50);
     sendMicrophoneInput();
 }
 
-//sendMicrophoneInput().then();
+sendMicrophoneInput().then();

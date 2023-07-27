@@ -71,7 +71,6 @@ fn rocket() -> _ {
                 routes::get_model_config
             ],
         )
-        .mount("/d", FileServer::from(relative!("client/dist")))
+        .mount("/d", FileServer::from(relative!("dist/")))
         .mount("/m", FileServer::from(relative!("models/")))
-        .mount("/s", FileServer::from(relative!("static")))
 }
