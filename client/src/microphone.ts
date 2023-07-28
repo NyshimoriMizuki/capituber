@@ -11,11 +11,11 @@ export default class Microphone {
     analyser: AnalyserNode | undefined;
     dataArray: Uint8Array;
 
-    constructor(fftSize: number) {
+    constructor(fftSize: number, media: MediaDevices) {
         this.initialized = false;
         this.dataArray = new Uint8Array([]);
 
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        media.getUserMedia({ audio: true, video: false })
             .then(stream => {
                 this.audioCtx = new AudioContext();
                 this.microphone = this.audioCtx.createMediaStreamSource(stream);

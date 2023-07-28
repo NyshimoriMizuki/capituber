@@ -44,7 +44,9 @@ fn rocket() -> _ {
 
     println!(" —— [Launching CapiTube-web] —— ");
     println!("Open the link in browser to play with CapiTube!");
-    println!("link: [ http://{ip}:{PORT} ]\n");
+    println!("link 1: [ http://localhost:{PORT} ]");
+    println!("link 2: [ http://{ip}:{PORT} ]\n");
+    println!("(link 2 cannot access the microphone, be cause it requires a https)");
 
     println!("You dont need to really care about the logs that here\nin the terminal.\n");
 

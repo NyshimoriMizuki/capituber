@@ -111,7 +111,8 @@ impl Fairing for ModelFairing {
 
     async fn on_response<'r>(&self, _request: &'r Request<'_>, response: &mut Response<'r>) {
         let allowed_methods = vec!["GET", "POST"].join(", ");
-        let link = format!("http://localhost:{}", self.port);
+
+        let link = format!("http://{}:{}", crate::get_link(), self.port);
 
         response.set_header(Header::new("Access-Control-Allow-Origin", link.clone()));
         response.set_header(Header::new("Access-Control-Allow-Methods", allowed_methods));

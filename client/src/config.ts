@@ -110,12 +110,11 @@ async function update(name: string, data: object) {
         });
 }
 
-const mic = new Microphone(512);
+const mic = new Microphone(512, navigator.mediaDevices);
 const sensor = new Sensor([0, 0], [350, 20], "black");
 const soundSlider = document.querySelector<HTMLInputElement>(".sound-slider")!;
 const soundBar = document.querySelector<HTMLCanvasElement>(".sound-bar")!;
 const bar_ctx = soundBar?.getContext("2d")!;
-
 soundBar.height = sensor.height();
 soundBar.width = sensor.width();
 

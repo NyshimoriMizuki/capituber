@@ -23,8 +23,8 @@ const sleep = (ms) => __awaiter(void 0, void 0, void 0, function* () { return ne
 const getModelConfig = () => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield fetch("http://localhost:1425/capitube/m/std/model.json")
         .catch((error) => {
-            console.error(error);
-        });
+        console.error(error);
+    });
     return yield response.json();
 });
 const clip = (x, min, max) => {
@@ -104,14 +104,14 @@ function update(name, data) {
         });
         response.json()
             .catch((err) => {
-                // very common false positive error in my tests.
-                if (err.toString().includes("unexpected end of data at line 1 column 1 of the JSON data"))
-                    return;
-                console.error(err);
-            });
+            // very common false positive error in my tests.
+            if (err.toString().includes("unexpected end of data at line 1 column 1 of the JSON data"))
+                return;
+            console.error(err);
+        });
     });
 }
-const mic = new Microphone(512);
+const mic = new Microphone(512, navigator.mediaDevices);
 const sensor = new Sensor([0, 0], [350, 20], "black");
 const soundSlider = document.querySelector(".sound-slider");
 const soundBar = document.querySelector(".sound-bar");
