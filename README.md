@@ -1,5 +1,44 @@
-# CapiTube - Web
-This is a version of the CapiTube that is builded to be the simplest version of Capitube and launch soon as possible. This because the original CapiTube will have a desktop UI and a punch of complex features.
+# CapiTuber
+CapiTuber is a lite PNGtuber app inspirend on [VeadoTube](https://veado.tube), but with a lot more features.
+
+***
+
+## Features
+For now, CapiTube will by inplemented, but the features that it will certainly have are:
+
+1. Real-time Reactive PNGmodel
+2. Shared output
+3. Very lite and fast
+
+## Associated repositories
+ - [CapiTube (old)](https://github.com/NyshimoriMizuki/capitube-web)
+ - [Capitube-Tests](https://github.com/NyshimoriMizuki/capitube-tests)
+
+## Compile by yourself.
+If you want to compile the CapiTube yourself, you will need:
+ - [Node.js](https://nodejs.org/en)
+ - [RustLang](https://www.rust-lang.org/)
+
+After you install all the prerequisites, to compile you will this commands on the terminal:
+ - `cd client` and ` npm run build` to build the client code.
+ - `cargo build --release` at the root directory will compile as release. The binaries will be in `/target/release`.
+ 
+***
+## Current To-do list:
+- [x] Configure model (with files)
+    - [x] Set frames
+    - [x] Set expression
+    - [x] Change model
+- [x] Working PNG model
+    - [x] Model frames load
+    - [x] Change on user talking
+    - [x] Sync OBS and Config sides
+- [ ] Front-end Layout
+    - [ ] Configure side layout
+        - [ ] Model configuration (with front-end)
+        - [ ] Settings menu
+    - [ ] OBS font layout
+
 
 ***
 
