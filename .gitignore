@@ -1,5 +1,5 @@
 /target
-**/js
+/dist/js
 **/node_modules
 
 
