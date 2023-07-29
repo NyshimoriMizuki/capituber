@@ -1,10 +1,16 @@
 [package]
-name = "capitube-web"
-version = "0.1.0"
+name = "capituber"
+version = "0.0.1"
 edition = "2021"
-description = "CapiTube is an app that captures the microphone input to animate a model based on PNG images."
+description = "CapiTube, a PNGTuber App"
+build = "build.rs"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+winresource = "0.1.16"
+
+[package.metadata.winresource]
+LegalCopyright = "MPL 2.0 (Nyshimori Mizuki)"
 
 [dependencies]
 rocket = { version = "=0.5.0-rc.3", features = ["json"] }

@@ -33,22 +33,15 @@ export default class Microphone {
 
 
     getSamples(): Uint8Array {
-        this.analyser?.getByteFrequencyData(this.dataArray)
+        this.analyser?.getByteFrequencyData(this.dataArray);
         return this.dataArray;
     }
 
     getVolume(): number {
-        let total = 0;
-
-        const sample = this.getSamples();
-        const size = sample.length > 10 ? 10 : sample.length
-
-        sample.sort((a, b) => (a < b) ? 1 : -1)
-            .slice(0, size)
-            .forEach(i => {
-                total += i;
-            });
-
-        return total / size;
+        let sum = 0;
+        for (const amplitude of this.getSamples()) {
+            sum += amplitude ** 2;
+        }
+        return Math.sqrt(sum / this.dataArray.length);
     }
 }

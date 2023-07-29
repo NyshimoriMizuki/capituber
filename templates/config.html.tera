@@ -22,7 +22,8 @@
 
     <div class="scale unselect">100×100</div>
     <div class="sound">
-        <input type="range" class="sound-slider" min="0" max="255" value="100">
+        <input type="range" class="sound-slider" min="0" max="120" value="45">
+        <br>
         <canvas class="sound-bar"></canvas>
     </div>
     <div class="model-container">

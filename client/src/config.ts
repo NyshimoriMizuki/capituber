@@ -115,25 +115,27 @@ const sensor = new Sensor([0, 0], [350, 20], "black");
 const soundSlider = document.querySelector<HTMLInputElement>(".sound-slider")!;
 const soundBar = document.querySelector<HTMLCanvasElement>(".sound-bar")!;
 const bar_ctx = soundBar?.getContext("2d")!;
+
 soundBar.height = sensor.height();
-soundBar.width = sensor.width();
+soundSlider.style.width = sensor.width() + 'px';
 
 const sendMicrophoneInput = async () => {
     bar_ctx.clearRect(0, 0, soundBar.width, soundBar.height);
     if (mic.initialized) {
-        const volumeHeight = Math.round(mic.getVolume() * soundBar.width / 255)
+        const volume = mic.getVolume();
 
         sensor.update((bar) => {
             bar.y = 0;
-            bar.width = volumeHeight;
+            bar.width = Math.round(volume * soundBar.width / 120);
         })
         sensor.draw(bar_ctx);
+
         await update("post-state", {
-            mouth_open: mic.getVolume() > parseInt(soundSlider.value),
+            mouth_open: volume > parseInt(soundSlider.value),
         });
     }
 
-    await sleep(50);
+    await sleep(25);
     sendMicrophoneInput();
 }
 

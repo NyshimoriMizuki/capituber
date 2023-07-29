@@ -46,11 +46,13 @@ fn rocket() -> _ {
     println!("Open the link in browser to play with CapiTube!");
     println!("link 1: [ http://localhost:{PORT} ]");
     println!("link 2: [ http://{ip}:{PORT} ]\n");
-    println!("(link 2 cannot access the microphone, be cause it requires a https)");
+    println!("(link 1 cannot be used out of this machine)");
+    println!("(link 2 cannot access the microphone, because it requires a https)\n");
 
     println!("You dont need to really care about the logs that here\nin the terminal.\n");
 
     let config = Config::figment()
+        .merge(("log_level", "critical"))
         .merge(("address", ADDRESS))
         .merge(("port", PORT));
 
