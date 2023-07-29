@@ -18,9 +18,10 @@ source.addEventListener("message", async (e) => {
     const expr = (await modelConfig).expressions;
     const currentFrame = expr[data.pose].frames[data.state];
 
+    const translate = `translate(${data.transform.position[0]}px, ${data.transform.position[1]}px)`;
+    const scale = `scale(${data.transform.scale[0]}%, ${data.transform.scale[1]}%)`;
+    const rotate = `rotate(${data.transform.rotation}deg)`;
+
     model.src = `m/${data.model}/${currentFrame}`;
-    model.style.scale = `${data.transform.scale[0]}% ${data.transform.scale[1]}%`;
-    model.style.left = `${data.transform.position[0]}px`;
-    model.style.top = `${data.transform.position[1]}px`
-    model.style.rotate = `${data.transform.rotation}deg`;
+    model.style.transform = `${translate} ${rotate} ${scale}`;
 });

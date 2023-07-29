@@ -1,15 +1,20 @@
+:root {
+    --size-x: 2000px;
+    --size-y: 2000px;
+}
+
 .model-container {
     border: 2px solid;
     border-radius: 5px;
 
-    width: calc(1750px/4);
-    height: calc(2000px/4);
+    width: calc(var(--size-x)/4);
+    height: calc(var(--size-y)/4);
 }
 
 .model-iframe {
     overflow: hidden;
-    width: 1750px;
-    height: 2000px;
+    width: var(--size-x);
+    height: var(--size-y);
 
     transform: scale(0.25);
     transform-origin: 0 0;

@@ -71,8 +71,7 @@ pub async fn config_model(model: &State<Mutex<ModelState>>) -> Template {
         "config",
         context! {
             title: "configuration",
-            port: crate::PORT,
-            link: format!("http://{}/{}", crate::get_link(), "model")
+            link: format!("http://{}:{}/model", crate::get_link(), crate::PORT)
         },
     )
 }
